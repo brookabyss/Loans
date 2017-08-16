@@ -1,0 +1,20 @@
+<h1>Name= @ViewBag.borrower.FirstName @ViewBag.borrower.LastName</h1>
+<h1>Amount Needed= @ViewBag.borrower.LoanAmount </h1>
+<h1>Amount Raised= @ViewBag.borrower.Raised </h1>
+
+<h2>List of people who lent you money</h2>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Amount Lent</th>
+    </tr>
+    @foreach(var loan in ViewBag.UserLoans){
+        <tr>
+            <td>@loan.Lenders.FirstName @loan.Lenders.LastName</td>
+            <td>@loan.Lenders.FirstName @loan.Lenders.Email</td>
+            <td>@loan.Lenders.FirstName @loan.Amount</td>
+        </tr>
+    }
+</table>

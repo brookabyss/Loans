@@ -1,0 +1,16 @@
+@model Loans.Models.LendersView
+
+<h1>Lender</h1>
+<form asp-controller="User" asp-action="LenderRegister" method="post">
+    <label asp-for="FirstName"></label>
+    <input asp-for="FirstName"/><br>
+    <label asp-for="LastName"></label>
+    <input asp-for="LastName"/><br>
+    <label asp-for="Email"></label>
+    <input asp-for="Email"/><br>
+    <label asp-for="Password"></label>
+    <input asp-for="Password" type="password"/><br>
+    <label for="">Money</label>
+    <input asp-for="Bank" type="number"><br>
+    <button type="submit">Register</button>
+</form>

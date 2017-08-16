@@ -1,0 +1,9 @@
+@using Loans.Models
+@model Loans.Models.ModelBundle
+
+@Html.Partial("lenderPartial", (LendersView)@Model.LendersModel)
+@Html.Partial("borrowerPartial", (BorrowersView)@Model.BorrowersModel)
+
+
+
+
