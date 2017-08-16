@@ -1,3 +1,6 @@
+<a asp-controller="User" asp-action="Logout">Logout</a>
+
+
 <h1>Name= @ViewBag.Lender.FirstName @ViewBag.Lender.LastName</h1>
 <h1>Account Balance= @ViewBag.Lender.Bank </h1>
 
@@ -22,7 +25,10 @@
             <td>@borrower.LoanAmount </td>
             <td>@borrower.Raised </td>
             <td>
-               <input type="number"><button>Lend</button>
+                <form asp-controller="User" asp-action="Lend" asp-route-BId=@borrower.BorrowersId>
+                    <input type="number" name="Money">
+                    <input type="Submit" value="Lend">
+                </form>
             </td>
         </tr>
     }
