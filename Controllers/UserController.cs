@@ -21,6 +21,7 @@ namespace Loans.Controllers
         [Route("")]
         public IActionResult Index()
         {
+            ViewBag.Errors= new List<string>();
             ModelBundle newBundle= new ModelBundle();
             ViewBag.Bundle= newBundle;
             return View(newBundle);
@@ -31,6 +32,7 @@ namespace Loans.Controllers
         [Route("Lender/new")]
         public IActionResult LenderRegister(LendersView LenView)
         {
+            ViewBag.errors=new List<string>();
             if(ModelState.IsValid){
                 Lenders newLend= new Lenders {
                     FirstName=LenView.FirstName,
@@ -71,6 +73,8 @@ namespace Loans.Controllers
         [Route("Borrower/new")]
         public IActionResult BorrowerRegister(BorrowersView BorrView)
         {
+            ViewBag.Errors= new List<string>();
+            ViewBag.errors= new List<string>();
              if(ModelState.IsValid){
                  Borrowers newBor= new Borrowers {
                     FirstName=BorrView.FirstName,
@@ -170,7 +174,7 @@ namespace Loans.Controllers
         [Route("lend/{BId}")]
         public IActionResult Lend(int BId, int Money)
         {
-            
+            ViewBag.Errors= new List<string>();
             int? Id=HttpContext.Session.GetInt32("UserId");
             
             Lenders lender=_context.Lenders
@@ -224,6 +228,7 @@ namespace Loans.Controllers
         [HttpGet]
         [Route("user/login")]
         public IActionResult ToLogin(){
+            ViewBag.Errors= new List<string>();
             ViewBag.errors=new List<string>();
             return View("login");
         }
