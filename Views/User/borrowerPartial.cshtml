@@ -14,7 +14,7 @@
  @foreach(var e in ViewBag.errors){
      <p>e</p>
  }
- 
+
 <h1>Borrower</h1>
 
 <form asp-controller="User" asp-action="BorrowerRegister" method="post">
@@ -36,4 +36,4 @@
 </form>
 
 
-<a asp-controller="User" asp-action="ToLogin">Already a member?</a>
+<a asp-controller="User" asp-action="ToLogin"  asp-route-choice="Borrower">Already a member?</a>

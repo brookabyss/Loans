@@ -118,6 +118,9 @@ namespace Loans.Controllers
         {
             ViewBag.errors= new List<string>();
             int? Id=HttpContext.Session.GetInt32("UserId");
+            if(Id==null){
+                return RedirectToAction("Index");
+            }
             Lenders lender=_context.Lenders
                 .OrderByDescending(a=>a.CreatedAt).
                 SingleOrDefault(b=>b.LendersId==(int)Id);
@@ -148,6 +151,9 @@ namespace Loans.Controllers
         {
             ViewBag.errors= new List<string>();
             int? Id=HttpContext.Session.GetInt32("UserId");
+            if(Id==null){
+                return RedirectToAction("Index");
+            }
             Borrowers borrower=_context.Borrowers
                 .OrderByDescending(a=>a.CreatedAt).
                 SingleOrDefault(b=>b.BorrowersId==(int)Id);
@@ -226,8 +232,9 @@ namespace Loans.Controllers
         // To Login 
 
         [HttpGet]
-        [Route("user/login")]
-        public IActionResult ToLogin(){
+        [Route("user/login/{choice}")]
+        public IActionResult ToLogin(string choice){
+            HttpContext.Session.SetString("choice",choice);
             ViewBag.Errors= new List<string>();
             ViewBag.errors=new List<string>();
             return View("login");
@@ -236,36 +243,46 @@ namespace Loans.Controllers
         [HttpPost]
         [Route("member/Login")]
         public IActionResult Login(string Email, string Password){
-            Borrowers borrower= new Borrowers();
-            Lenders lender = new Lenders();
-             borrower= _context.Borrowers.SingleOrDefault(a=>a.Email==Email);
-           lender= _context.Lenders.SingleOrDefault(a=>a.Email==Email);
-
-            if(borrower==null&& lender==null){
-                ViewBag.errors.Add("Email doesn't exist please register");
-                return View("Index");
+            string choice= HttpContext.Session.GetString("choice");
+            if (choice==null){
+                return RedirectToAction("ToLogin");
             }
-            else{    
-                    if (borrower!=null){
-                         if (borrower.Password==Password){
-                            HttpContext.Session.SetInt32("UserId",borrower.BorrowersId);
-                            return RedirectToAction("ShowBorrower");
-                        }
-                    }  
-                    else if (lender!=null){
-                        if(lender.Password==Password){
-                            HttpContext.Session.SetInt32("UserId",lender.LendersId);
-                            return RedirectToAction("ShowLender");
-                        }
+            else if(choice=="Borrower"){
+                 Borrowers borrower= new Borrowers();
+                 borrower= _context.Borrowers.SingleOrDefault(a=>a.Email==Email);
+                  if(borrower==null){
+                        ViewBag.errors.Add("Email doesn't exist please register");
+                        return View("Index");
                     }
-                     
-                    else{
+                 else if (borrower!=null&&(borrower.Password==Password)){
+                         HttpContext.Session.SetInt32("UserId",borrower.BorrowersId);
+                         return RedirectToAction("ShowBorrower");  
+                    }  
+                 else{
                         ViewBag.errors.Add("Email or password is incorrect");
                     }
-                   
+                  
+            }
+            else if(choice=="Lender"){
+                Lenders lender = new Lenders();
+                lender= _context.Lenders.SingleOrDefault(a=>a.Email==Email);
+                if(lender==null){
+                    ViewBag.errors.Add("Email doesn't exist please register");
                     return View("Index");
                 }
-        
+                else if (lender!=null&&(lender.Password==Password)){
+                    HttpContext.Session.SetInt32("UserId",lender.LendersId);
+                    return RedirectToAction("ShowLender");
+                }
+                else{
+                    ViewBag.errors.Add("Email or password is incorrect");
+                    return View("Index");
+                }
+                   
+                    
+            }
+            
+            return RedirectToAction("Index");
 
         }
 
@@ -273,8 +290,14 @@ namespace Loans.Controllers
         [Route("user/logout")]
         public IActionResult Logout(){
             HttpContext.Session.Clear();
+           int? Id=HttpContext.Session.GetInt32("UserId");
+            if(Id==null){
+                System.Console.WriteLine($"Id inside Log out hello");
+            }
+            
             return RedirectToAction("Index");
         }
+        
 
 
 
